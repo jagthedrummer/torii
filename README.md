@@ -318,6 +318,101 @@ via the `torii` property injected onto _routes_, or the `session` property
 injected onto routes and controllers (using the session management feature
 will require you to write an adapter for your application – see notes on session management below).
 
+## Using an iframe instead of a popup
+
+You can configure torii to use an in-page iframe instead of a separate
+popup window for authentication. This can be done on either a global or
+a per-provider basis.
+
+To change this globally set the `remoteServiceName` variable in the main
+torii config to be `'iframe'`.
+
+```JavaScript
+/* jshint node: true */
+// config/environment.js
+module.exports = function(environment) {
+  var ENV = {
+    /* ... */
+    torii: {
+      remoteServiceName: 'iframe',
+      providers: { /* ... */ }
+    }
+  };
+  return ENV;
+};
+```
+
+If you only want the iframe for a single provider you can include the
+`remoteServiceName` value in the configuration for that provider.
+
+```JavaScript
+/* jshint node: true */
+// config/environment.js
+module.exports = function(environment) {
+  var ENV = {
+    /* ... */
+    torii: {
+      // a 'session' property will be injected on routes and controllers
+      sessionServiceName: 'session',
+      providers: {
+        'mycorp-oauth2': {
+          remoteServiceName: 'iframe'
+          /* ... */
+        }
+      }
+    }
+  };
+  return ENV;
+};
+```
+
+Once your provider has been configured you need to tell torii where to
+append the iframe when you call `session.open` by using the
+`{{torii-iframe-placeholder}}` component. You need to make sure that
+this component is added to the DOM before you call `session.open` and if
+you give the user a way to back out of authentication (by closing a
+modal that contains the iframe, for instance) you need to make sure that
+the component is removed from the DOM so that torii will see that the
+auth flow has been cancelled.
+
+For instance, in `routes/application.js` you might have the following
+`signIn` action:
+
+```JavaScript
+signIn: function() {
+  var route = this;
+  // Set a value that will result in the placeholder component being
+  // added to the DOM
+  route.controller.set('signingIn',true);
+  // We need to user Ember.run.next to make sure that the placeholder
+  // component has been added to the DOM before session.open is called
+  Ember.run.next(this,function(){
+    Ember.$('#signin-modal-back').one('click',function(){
+      route.controller.set('signingIn',false);
+    });
+    this.get("session")
+      .open("clickfunnels-oauth2")
+      .then(function(){
+        route.controller.set('signingIn',false);
+      });
+  });
+}
+```
+
+Then in `templates/application.hbs` you might have:
+
+```handlebars
+{{#if signingIn}}
+<div id="signin-modal-back">
+  <div id="signin-modal-frame">
+    <div id="signin-modal-content">
+      {{torii-iframe-placeholder}}
+    </div>
+  </div>
+</div>
+{{/if}}
+```
+
 ## Providers in Torii
 
 Torii is built with several providers for common cases. If you intend to

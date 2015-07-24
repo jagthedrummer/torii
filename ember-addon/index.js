@@ -20,9 +20,14 @@ module.exports = {
     var instanceInitializers = new Funnel(tree, {
       srcDir: 'instance-initializers',
       destDir: 'instance-initializers'
-    })
+    });
 
-    return mergeTrees([initializers, instanceInitializers]);
+    var components = new Funnel(tree, {
+      srcDir: 'app-components',
+      destDir: 'components'
+    });
+
+    return mergeTrees([initializers, instanceInitializers, components]);
   },
 
   treeForAddon: function treeForAddon() {
