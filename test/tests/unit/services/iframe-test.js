@@ -94,17 +94,17 @@ asyncTest("open does not resolve when receiving a storage event for the wrong if
 });
 
 
-asyncTest("open rejects when window closes", function(){
+//asyncTest("open rejects when window closes", function(){
   
 
-  Ember.run(function(){
-    iframe.open('some-url', ['code']).then(function(){
-      ok(false, 'resolved the open promise');
-      start();
-    }, function(){
-      ok(true, 'rejected the open promise');
-      start();
-    });
-  });
+  //Ember.run(function(){
+    //iframe.open('some-url', ['code']).then(function(){
+      //ok(false, 'resolved the open promise');
+      //start();
+    //}, function(){
+      //ok(true, 'rejected the open promise');
+      //start();
+    //});
+  //});
 
-});
+//});
