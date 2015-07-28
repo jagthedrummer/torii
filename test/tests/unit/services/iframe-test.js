@@ -1,6 +1,6 @@
 import Iframe from 'torii/services/iframe';
 import PopupIdSerializer from 'torii/lib/popup-id-serializer';
-import { CURRENT_REQUEST_KEY } from 'torii/services/popup';
+import { CURRENT_REQUEST_KEY } from 'torii/mixins/ui-service-mixin';
 
 var iframe;
 var originalWindowOpen = window.open;
