@@ -41,7 +41,7 @@ asyncTest("open resolves based on an embedded iframe window", function(){
   var iframeId = '09123-asdf';
   var mockWindow = null
 
-  iframe = new Iframe({iframeIdGenerator: buildIframeIdGenerator(iframeId)});
+  iframe = new Iframe({remoteIdGenerator: buildIframeIdGenerator(iframeId)});
 
   Ember.run(function(){
     iframe.open(expectedUrl, ['code']).then(function(data){
@@ -92,7 +92,6 @@ asyncTest("open does not resolve when receiving a storage event for the wrong if
     start();
   },10);
 });
-
 
 //asyncTest("open rejects when window closes", function(){
   
