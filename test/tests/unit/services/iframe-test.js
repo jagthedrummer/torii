@@ -30,6 +30,7 @@ module("Iframe - Unit", {
   teardown: function(){
     localStorage.removeItem(CURRENT_REQUEST_KEY);
     window.open = originalWindowOpen;
+    Ember.$('#torii-iframe').remove();
     Ember.run(iframe, 'destroy');
   }
 });
@@ -93,17 +94,19 @@ asyncTest("open does not resolve when receiving a storage event for the wrong if
   },10);
 });
 
-//asyncTest("open rejects when window closes", function(){
+asyncTest("open rejects when the iframe is removed", function(){
   
 
-  //Ember.run(function(){
-    //iframe.open('some-url', ['code']).then(function(){
-      //ok(false, 'resolved the open promise');
-      //start();
-    //}, function(){
-      //ok(true, 'rejected the open promise');
-      //start();
-    //});
-  //});
+  Ember.run(function(){
+    iframe.open('some-url', ['code']).then(function(){
+      ok(false, 'resolved the open promise');
+      start();
+    }, function(){
+      ok(true, 'rejected the open promise');
+      start();
+    });
+  });
 
-//});
+  Ember.$('#torii-iframe').remove();
+
+});
