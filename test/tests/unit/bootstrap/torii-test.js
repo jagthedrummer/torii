@@ -10,12 +10,20 @@ module("boostrapTorii", {
   }
 });
 
-test("inject popup onto providers", function(){
+test("inject popupService onto providers", function(){
   var results = toriiContainer();
   registry = results[0];
   container = results[1];
   registry.register('torii-provider:foo', Ember.Object.extend());
-  ok(container.lookup('torii-provider:foo').get('popup'), 'Popup is set');
+  ok(container.lookup('torii-provider:foo').get('popupService'), 'Popup Service is set');
+});
+
+test("inject iframeService onto providers", function(){
+  var results = toriiContainer();
+  registry = results[0];
+  container = results[1];
+  registry.register('torii-provider:foo', Ember.Object.extend());
+  ok(container.lookup('torii-provider:foo').get('iframeService'), 'Popup Service is set');
 });
 
 test("inject legacy DS store onto providers, adapters", function(){
