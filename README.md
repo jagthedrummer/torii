@@ -386,7 +386,7 @@ signIn: function() {
   route.controller.set('signingIn',true);
   // We need to user Ember.run.next to make sure that the placeholder
   // component has been added to the DOM before session.open is called
-  Ember.run.next(this,function(){
+  Ember.run.schedule('afterRender', this, function(){
     Ember.$('#signin-modal-back').one('click',function(){
       route.controller.set('signingIn',false);
     });
